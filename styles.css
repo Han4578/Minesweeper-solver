@@ -12,7 +12,7 @@ body {
 }
 
 .border {
-    height: calc(var(--width));
+    height: var(--width);
     box-sizing: content-box;
     aspect-ratio: 1;
     display: flex;
@@ -20,6 +20,10 @@ body {
     align-items: center;
     margin: 10vh auto;
     border: 5px solid grey;
+}
+
+.red {
+    background-color: red !important;
 }
 
 .container, .overlay {

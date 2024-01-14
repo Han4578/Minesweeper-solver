@@ -137,7 +137,7 @@ function reveal(e, m = null) {
         }
     } else if (map.get("value") == "b" && !starting.includes(map)) {
         gameEnd()
-        tile.style.backgroundColor = "red"
+        tile.classList.add("red")
     }
     if (m == null && [...tiles.values()].every(m => {return m.get("revealed") || m.get("value") == "b"})) {
         for (const map of tiles.values()) {
@@ -235,6 +235,7 @@ function reset() {
         over.classList.remove("reveal")
         over.classList.remove("bomb")
         tile.classList.remove("bomb")
+        tile.classList.remove("red")
         tile.innerText = ""
     }
     generateBombs()
