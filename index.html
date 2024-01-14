@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./main.js" defer></script>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="border">
+        <div class="container"></div>
+        <div class="overlay"></div>
+    </div>
+    <div class="settings">
+        <div>
+            <label for="width">Width: </label>
+            <label for="size">Size: </label>
+            <label for="bomb">Mines: </label>
+        </div>
+        <div>
+            <div>
+                <input type="number" name="width" id="width" onkeydown="filterSymbols(event)" value="300" onblur="update(this, 'width')">
+                <span>px</span>
+            </div>
+            <div>
+                <input type="number" name="size" id="size" onkeydown="filterSymbols(event)" value="10" onblur="update(this, 'size')">
+                <span>tiles</span>
+            </div>
+            <div>
+                <input type="number" name="bomb" id="bomb" onkeydown="filterSymbols(event)" value="50" onblur="update(this, 'bombs')">
+            </div>
+        </div>
+        <button class="reset" onclick="reset()">Reset</button>
+    </div>
+</body>
+</html>

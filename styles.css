@@ -1,0 +1,120 @@
+:root {
+    --size: 10;
+    --width: 300px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.border {
+    height: calc(var(--width));
+    box-sizing: content-box;
+    aspect-ratio: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10vh auto;
+    border: 5px solid grey;
+}
+
+.container, .overlay {
+    height: calc(var(--width));
+    aspect-ratio: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.overlay {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    /* display: none; */
+}
+
+.tile {
+    border: lightgray 1px solid;
+}
+
+.tile, .otile {
+    aspect-ratio: 1;
+    background-color: rgb(238, 238, 238);
+    height: calc(var(--width) / var(--size));
+    font-size: calc((var(--width) / var(--size)) * 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: minesweeper;
+}
+
+.otile {
+    background-color: rgb(173, 173, 173);
+    border: lightgray calc((var(--width) / var(--size)) * 0.2) outset;
+    pointer-events: all;
+}
+
+.otile:hover, .reset:hover {
+    filter: brightness(0.9);
+}
+
+.otile.end:hover {
+    filter: brightness(1);
+}
+
+.otile.reveal, .otile.reveal.end:hover {
+    filter: opacity(0) brightness(1);
+    pointer-events: none;
+}
+
+.otile.bomb, .otile.bomb:hover {
+    filter: opacity(0);
+}
+
+.tile.bomb {
+    background-image: url(./images/mine.png);
+    background-size: cover;
+}
+
+.otile.flag {
+    background-image: url(./images/flag.webp);
+    background-size: cover;
+}
+
+.settings {
+    display: flex;
+    width: 40%;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 3%;
+}
+
+.settings > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.settings > div > * {
+    flex-basis: 22px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.reset {
+    aspect-ratio: 1;
+    height: 100%;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: mineSweeper;
+    src: url(./mine-sweeper.ttf);
+}
