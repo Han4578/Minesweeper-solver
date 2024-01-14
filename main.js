@@ -6,6 +6,7 @@ let width = 300
 let tiles = new Map()
 let starting = []
 let layoutChanged = false
+let shown = []
 
 document.querySelector(":root").style.setProperty("--size", size)
 document.querySelector(":root").style.setProperty("--width", width + "px")
@@ -85,6 +86,7 @@ function generateGrids() {
 }
 
 function generateBombs() {
+    shown = []
     let i = 0
     let b = bombs
     for (let tile of tiles.values()) {
@@ -116,6 +118,7 @@ function reveal(e, m = null) {
     over.classList.add("reveal")
     map.set("revealed", true)
     over.removeEventListener("click", reveal)
+    shown.push(map)
 
     if (starting.length == 0) {
         for (const m of tiles.values()) {
@@ -139,7 +142,7 @@ function reveal(e, m = null) {
         gameEnd()
         tile.classList.add("red")
     }
-    if (m == null && [...tiles.values()].every(m => {return m.get("revealed") || m.get("value") == "b"})) {
+    if ([...tiles.values()].every(m => {return m.get("revealed") || m.get("value") == "b"})) {
         for (const map of tiles.values()) {
             let over = map.get("over")
             over.removeEventListener("click", reveal)
@@ -194,18 +197,17 @@ function removeBomb(map) {
     return true
 }
 
-function flag(e) {
-    e.preventDefault()
-    let over = e.target
-    let map = over.map
+function flag(e, m = null) {
+    if (m == null) e.preventDefault()
+    let map = (m == null)? e.target.map : m
+    let over = map.get("over");
     over.classList.toggle("flag")
     map.set("flagged", !map.get("flagged"))
 }
 
-function clear(e) {
-    e.preventDefault()
-    let over = e.target
-    let map = over.map
+function clear(e, m = null) {
+    if (m == null) e.preventDefault()
+    let map = (m == null)? e.target.map : m
     if (!map.get("revealed") || map.get("surrounding").filter(m => {return m.get("flagged")}).length != map.get("value")) return
     for (const m of map.get("surrounding")) {
         if (m.get("flagged") || m.get("revealed")) continue
@@ -270,5 +272,44 @@ function update(input, params) {
             break;
         default:
             break;
+    }
+}
+
+function start() {
+    let hasChanged = true
+    let done = []
+
+    if (starting.length == 0) reveal("", tiles.get(`${Math.floor(size / 2)},${Math.floor(size / 2)}`))
+    while (hasChanged) {
+        hasChanged = false
+        for (let i = 0; i < shown.length; i++) {
+            const map = shown[i];
+            let hiddenTiles = [...map.get("surrounding")].filter(m => {return !m.get("revealed")})
+            if (hiddenTiles.length == 0) {
+                shown.splice(i, 1)
+                i--
+                done.push(map)
+                continue
+            }
+            if (hiddenTiles.length == map.get("value")) {
+                for (const m of hiddenTiles) {
+                    if (m.get("flagged")) continue
+                    flag("", m)
+                }
+                hasChanged = true
+                shown.splice(i, 1)
+                i--
+                done.push(map)
+            } else {
+                let flags = hiddenTiles.filter(m => {return m.get("flagged")})
+                if (flags.length == map.get("value")) {
+                    clear("", map)
+                    hasChanged = true
+                    shown.splice(i, 1)
+                    i--
+                    done.push(map)
+                }
+            }
+        }
     }
 }
